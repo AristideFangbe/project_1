@@ -51,7 +51,7 @@
 						<c:if test="${!empty requestScope.donnees}">							
 							<table  class="table table-striped">
 	                            <thead>
-	                                <tr>
+	                                <tr class="font-weight-bold">
 	                                    <td>Nom</td>
 	                                    <td>Type</td>                                                               
 	                                </tr>

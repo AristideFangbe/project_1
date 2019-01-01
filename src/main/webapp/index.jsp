@@ -4,7 +4,7 @@
 <html lang="fr">
 <head>
  <meta charset="utf-8">
-  <title>webShell -- Interprèteur de commandes Web</title>  
+  <title>Remote Explorer -- Explorateur web distant</title>  
   <link rel="stylesheet" href="css/bootstrap.min.css">  
   <link rel="stylesheet" href="css/bootstrap-theme.min.css">         
   <script src="js/jquery.min.js"></script>
@@ -16,7 +16,7 @@
  <div class="container theme-showcase" role="main">
  <div class="row">
 	<div class="col-lg-12">
- 		<h1 class="font-weight-bold text-center">Interprèteur de commande "WEBSHELL 0.1"</h1>
+ 		<h1 class="font-weight-bold text-center">Explorateur web distant "REMOTE EXPLORER 0.1"</h1>
  	</div>
  </div>
   <div class="row">
@@ -34,7 +34,7 @@
 				<input type="text" id="cmd" name="cmd" placeholder="Saisir la commande ici" class="form-control" tabindex="5" required/>
 			</div>
 			<div class="float-right">					
-				<button id="btAnnul" type="reset" class="btn btn-danger" tabindex="5">Annuler</button>
+				<button id="btAnnul" type="reset" class="btn btn-danger" tabindex="35">Annuler</button>
 				<button id="btValid" type="submit" class="btn btn-primary" tabindex="40">Valider</button>
 			</div>
 		</form>	

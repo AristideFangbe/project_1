@@ -52,6 +52,7 @@ public class Compute extends HttpServlet {
 		String resultat = "KO";
 		String[] param = commande.split(" ");
 		int taille = param.length;
+		//Continuer ssi la commande a des arguments
 		if(taille > 1) {
 			String cmd = param[0];
 			String nomFichier = param[1];
@@ -68,48 +69,20 @@ public class Compute extends HttpServlet {
 			
 			//Commande touch
 			if(cmd.equalsIgnoreCase("touch")) {
-				try{
-					//Désactivé car on ne crée pas de fichier vide, il faut specifier les 3 paramètres pour créer un fichier et ajouter le contenu  
-					/*
-					fichier.getParentFile().mkdirs();
-					//Création du fichier								
-					fichier.createNewFile();
-					*/
-					//Ajout du contenu du fichier seulement si le 3è paramètre a été spécifié
+				try {
 					if(taille >2) {
-						//Création des dossiers parents s'ils n'existent pas
-						fichier.getParentFile().mkdirs();
-						//Création du fichier								
-						fichier.createNewFile();
-				        FileWriter fw = new FileWriter(fichier);
-				        BufferedWriter bw = new BufferedWriter(fw);
-				        //Recupérer le debut de la chaine à ecrire dans le fichier texte 
-				        int debut = commande.indexOf('"')+1;
-				        if(debut > 0) {
-					        int fin = commande.lastIndexOf('"');	
-					        if(fin > 0) {					        	
-					        	bw.write(commande.substring(debut, fin));
-					        }
-					        else
-					        	bw.write(commande.substring(debut));
-				        }
-				        else
-				        	bw.write(param[2]);
-				        
-				        bw.close();
-				        resultat = "OK";
+						if(creerFichier(fichier, commande, param[2]))
+							resultat = "OK";
 					}
-					//Désactivé : car la création de fichier vide a été désactivée
-					//resultat = "OK";
-			    }
-			    catch(IOException e){		    			    			    	
-			        e.printStackTrace();
-			    }
-				finally {
-			    	System.out.println(commande +" : "+resultat);
-			    	forwardReponse(request, response, resultat);		    	
 				}
-		
+				catch(Exception e)
+				{
+					e.printStackTrace();
+				}
+				finally {
+					System.out.println(commande +" : "+resultat);
+			    	forwardReponse(request, response, resultat);		    
+				}
 			}
 			
 			//Commande rm
@@ -134,10 +107,10 @@ public class Compute extends HttpServlet {
 			
 			//Commande ls
 			else if(cmd.equalsIgnoreCase("ls")) {
-				//Le map pour renseigner les fichiers ou dossiers et leurs type
+
+				//Le map pour renseigner les fichiers ou dossiers et leurs types
 				Map<String, Boolean> donnees = new HashMap<String, Boolean>();
 				try {
-					donnees = new HashMap<String, Boolean>();
 					//Vérifier si le chemin correpond bien à un dossier avant de continuer
 					if(fichier.isDirectory()) {
 						File[] liste = fichier.listFiles();
@@ -183,6 +156,43 @@ public class Compute extends HttpServlet {
         req.setAttribute("resultat", resultat);
         req.setAttribute("donnees", donnees);
         dispatcher.forward(req, resp);
-    } 
+    }
+	
+	private boolean creerFichier(File fichier, String commande, String contenu) throws IOException{		
+			//Désactivé car on ne crée pas de fichier vide, il faut specifier les 3 paramètres pour créer un fichier et ajouter le contenu  
+			/*
+			fichier.getParentFile().mkdirs();
+			//Création du fichier								
+			fichier.createNewFile();
+			*/
+			//Ajout du contenu du fichier seulement si le 3è paramètre a été spécifié
+			//if(taille >2) {
+		
+				//Création des dossiers parents s'ils n'existent pas
+				fichier.getParentFile().mkdirs();
+				//Création du fichier								
+				fichier.createNewFile();
+		        FileWriter fw = new FileWriter(fichier);
+		        BufferedWriter bw = new BufferedWriter(fw);
+		        //Recupérer le debut de la chaine à ecrire dans le fichier texte 
+		        int debut = commande.indexOf('"')+1;
+		        if(debut > 0) {
+			        int fin = commande.lastIndexOf('"');	
+			        if(fin > 0) {					        	
+			        	bw.write(commande.substring(debut, fin));
+			        }
+			        else
+			        	bw.write(commande.substring(debut));
+		        }
+		        else
+		        	bw.write(contenu);
+		        
+		        bw.close();
+		        return true;
+		        
+			//}
+			//Désactivé : car la création de fichier vide a été désactivée
+			//resultat = "OK";	    
+	}
 
 }
